@@ -8,7 +8,7 @@
 #include <fstream>
 #include "Digrafo.h"
 #include <queue>
-
+#include <unordered_map>
 
 class CaminoMasCorto {
 public:
@@ -21,14 +21,14 @@ public:
         return dist[v];
     }
     // devuelve el camino más corto desde el origen a v (si existe)
-    std::queue<int> camino(int v) const {
-        if (!visit[v]) throw std::domain_error("No existe camino");
-        std::queue<int> cam;
-        for (int x = v; x != s; x = ant[x])
-            cam.push(x);
-        cam.push(s);
-        return cam;
-    }
+    //std::queue<int> camino(int v) const {
+    //    if (!visit[v]) throw std::domain_error("No existe camino");
+    //    std::queue<int> cam;
+    //    for (int x = v; x != s; x = ant[x])
+    //        cam.push(x);
+    //    cam.push(s);
+    //    return cam;
+    //}
 
 private:
     std::vector<bool> visit; // visit[v] = ¿hay camino de s a v?
@@ -63,56 +63,43 @@ bool resuelveCaso() {
     if (!N && !K && !S && !E)
         return false;
 
-    Digrafo g(N*N);
-    std::queue<std::pair<int, int>> serpientes;
-    std::queue<std::pair<int, int>> escaleras;
+    Digrafo g(N * N);
+    std::unordered_map<int, int> serpEsc;
     int a, b;
 
-    for (int i = 0; i < S; ++i) {
-        std::pair<int, int> pair;
-        std::cin >> pair.first >> pair.second;
-
-        serpientes.push(pair);
-    }
-    for (int i = 0; i < E; ++i) {
-        std::pair<int, int> pair;
-        std::cin >> pair.first >> pair.second;
-
-        escaleras.push(pair);
+    for (int i = 0; i < S+E; ++i) {
+        std::cin >> a >> b;
+        serpEsc.insert({ a-1, b-1 });
     }
 
+    int V = N * N;
     //Hacer grafo
-    for (int i = 0; i < N*N - 1; ++i) {
-        for (int j = 1; j <= K; ++j) {
+    for (int i = 0; i < V-1; ++i) { //Si n = 10, de 1 a 99
+        for (int j = K; j >= 1; --j) {
 
-            int x = i + j;
+            int x = i + j; //Porque de i puedes acceder a i+1, i+2, ... , i+K
 
-            if (!serpientes.empty() && i >= serpientes.front().first-1)
-                serpientes.pop();
-            else if (!escaleras.empty() && i >= escaleras.front().first-1)
-                escaleras.pop();
-
-            if (!serpientes.empty() && x == serpientes.front().first-1) {
-                g.ponArista(i, serpientes.front().second-1);
-            }
-            else if (!escaleras.empty() && x == escaleras.front().first-1) {
-                g.ponArista(i, escaleras.front().second-1);
-            }
-            else if (x <= N*N - 1) {
-                g.ponArista(i, x);
+            if (x < V) {
+                if (serpEsc.find(x) != serpEsc.end()) { //Serpiente en x
+                    g.ponArista(i, serpEsc[x]);
+                } else {
+                    g.ponArista(i, x);
+                }
             }
         }
     }
 
+    //for (int i = 0; i < g.V(); ++i) {
+    //    std::cout << i+1 << ": ";
+    //    for (int j : g.ady(i)) {
+    //        std::cout << j+1 << " ";
+    //    }
+    //    std::cout << '\n';
+    //}
+
     // escribir sol
     CaminoMasCorto sol(g, 0);
-    std::cout << sol.distancia(99) << '\n';
-    std::queue<int> camino = sol.camino(99);
-
-    while (!camino.empty()) {
-        std::cout << camino.front() << ' ';
-        camino.pop();
-    }
+    std::cout << sol.distancia(V -1) << '\n';
 
     return true;
 }

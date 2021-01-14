@@ -1,0 +1,4 @@
+
+//Vector de tiempo, intervalo válido de j(limite menor) a N
+//Opciones: Ver la peli i ( + tiempo peli i + 10; j avanza hasta que acaba la peli + 10)
+//          No ver la peli i (j se queda igual; pasamos a la siguiente i)

@@ -1,9 +1,6 @@
 
 // Tatiana Duarte Balvís
 
-// Comentario general sobre la solución,
-// explicando cómo se resuelve el problema
-
 #include <iostream>
 #include <fstream>
 #include "DigrafoValorado.h"
@@ -44,7 +41,7 @@ public:
     int64_t nCaminos(int v) const { return caminos[v]; }
 
 private:
-    const int INF = 1000000;
+    const int INF = 1000000000;
     int origen;
     std::vector<int64_t> dist;
     std::vector<int64_t> caminos; //Caminos minimos a cada indice
@@ -75,12 +72,12 @@ bool resuelveCaso() {
     DigrafoValorado<int> g(V);
     for (int i = 0; i < A; ++i) {
         std::cin >> a >> b >> c;
-        g.ponArista(AristaDirigida<int>(a-1, b-1, c));
-        g.ponArista(AristaDirigida<int>(b-1, a-1, c));
+        g.ponArista(AristaDirigida<int>(a - 1, b - 1, c));
+        g.ponArista(AristaDirigida<int>(b - 1, a - 1, c));
     }
 
     CaminosMin sol(g, 0);
-    std::cout << sol.calculaNCaminos(g, V-1) << '\n';
+    std::cout << sol.calculaNCaminos(g, V - 1) << '\n';
 
     return true;
 }
