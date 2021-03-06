@@ -6,6 +6,10 @@
 
 #include "Matriz.h"
 
+
+
+//sol(i,j) = { max (sol(i+2, j), sol(i, j+2), sol(i+1, j+1)) + 
+
 //Longitud del menor palindromo añadiendo letras a la palabra
 int resolver_rec(std::string const& palabra, int i, int j, Matriz<int>& palindromo) { //Descendente O(n^2) ??
     int& res = palindromo[i][j];

@@ -25,9 +25,9 @@ bool resolver(std::priority_queue<Tarea> tareas, int T) {
 
         if (ocupado > t.comienzo)
             return false; //hay conflicto
-        
+
         ocupado = t.fin;
-        if (ocupado >= T)
+        if (ocupado >= T && tareas.top().comienzo >= T)
             return true;
 
         if (t.periodo != -1) { //si se repite
@@ -66,7 +66,7 @@ bool resuelveCaso() {
     }
 
     //escribir solucion
-    if(resolver(tareas, T))
+    if (resolver(tareas, T))
         std::cout << "NO" << '\n';
     else
         std::cout << "SI" << '\n';
